@@ -17,6 +17,7 @@ import RedoIcon from '@mui/icons-material/Redo';
 import UndoIcon from '@mui/icons-material/Undo';
 import RestartAltIcon from '@mui/icons-material/RestartAlt';
 import GifIcon from '@mui/icons-material/Gif';
+import DeleteIcon from '@mui/icons-material/Delete';
 
 function App() {
   const [bgImage, setBgImage] = useState<string | null>(null);
@@ -1433,20 +1434,25 @@ function App() {
                   </div>
                 );
               })()}
-              {/* Text Boxes */}
-              <div style={{ display: 'flex', flexDirection: 'column', minHeight: 120, maxHeight: 300, padding: '8px 0 0 0', background: '#181a20', borderRadius: 10, boxShadow: '0 2px 12px #00ffe744', marginTop: 10 }}>
-                <Typography variant="subtitle2" sx={{ color: '#00ffe7', fontWeight: 700, mb: 1, fontFamily: 'Bangers, Impact, Inter, Arial, sans-serif', fontSize: 17, textAlign: 'center', width: '100%' }}>Text Boxes</Typography>
-                <div style={{ flex: 1, minHeight: 0, maxHeight: 240, overflowY: 'auto', display: 'flex', flexDirection: 'column', gap: 6, padding: '0 4px 8px 4px' }}>
-                  {texts.map((text) => (
-                    <div key={text.id} style={{ display: 'flex', alignItems: 'center', marginBottom: 0, height: 28 }}>
-                      <Button size="small" variant={selectedTextId === text.id ? 'contained' : 'outlined'} onClick={() => setSelectedTextId(text.id)} sx={{ flex: 1, fontSize: 13, textTransform: 'none', borderRadius: 2, minWidth: 0, px: 1, py: 0, height: 22, display: 'flex', alignItems: 'center', justifyContent: 'center', bgcolor: selectedTextId === text.id ? '#00ffe7' : '#23272f', color: selectedTextId === text.id ? '#181a20' : '#fff', fontWeight: 900, fontFamily: 'Bangers, Impact, Inter, Arial, sans-serif', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', cursor: 'pointer' }}>{text.value || 'Text'}</Button>
-                      <IconButton size="small" onClick={() => removeText(text.id)} title="Remove" sx={{ ml: 1, color: '#ff00c8', width: 20, height: 20, minWidth: 12, minHeight: 12, fontSize: 8, borderRadius: 1, p: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', background: 'transparent', border: 'none', boxShadow: 'none' }}><span style={{ fontWeight: 900, fontSize: 8, lineHeight: 1, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>×</span></IconButton>
-                    </div>
-                  ))}
-                </div>
+            </div>
+          </div>
+          {/* --- Redesigned Text Boxes Card --- */}
+          <div style={{ padding: '0 24px', marginBottom: 24 }}>
+            <div style={{ background: 'rgba(24,26,32,0.85)', borderRadius: 16, boxShadow: '0 4px 24px #00ffe744', border: '1.5px solid #00ffe7', padding: '18px 14px', display: 'flex', flexDirection: 'column', gap: 10 }}>
+              <Typography variant="subtitle2" sx={{ color: '#00ffe7', fontWeight: 900, mb: 1, fontFamily: 'Bangers, Impact, Inter, Arial, sans-serif', fontSize: 20, textAlign: 'center', width: '100%', letterSpacing: 1 }}>Text Boxes</Typography>
+              <div style={{ flex: 1, minHeight: 80, maxHeight: 260, overflowY: 'auto', display: 'flex', flexDirection: 'column', gap: 8, padding: '0 2px' }}>
+                {texts.map((text) => (
+                  <div key={text.id} style={{ display: 'flex', alignItems: 'center', background: selectedTextId === text.id ? 'rgba(0,255,231,0.10)' : 'rgba(35,39,47,0.85)', borderRadius: 8, boxShadow: selectedTextId === text.id ? '0 2px 8px #00ffe744' : 'none', border: selectedTextId === text.id ? '1.5px solid #00ffe7' : '1.5px solid transparent', padding: '4px 8px', transition: 'all 0.15s', cursor: 'pointer', minHeight: 36 }}>
+                    <span onClick={() => setSelectedTextId(text.id)} style={{ flex: 1, fontSize: 15, fontWeight: 900, fontFamily: 'Bangers, Impact, Inter, Arial, sans-serif', color: selectedTextId === text.id ? '#00ffe7' : '#fff', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', paddingRight: 8 }}>{text.value || 'Text'}</span>
+                    <IconButton size="small" onClick={() => removeText(text.id)} title="Remove" sx={{ color: '#e53935', width: 28, height: 28, borderRadius: 2, p: 0.5, ml: 1, transition: 'background 0.15s', '&:hover': { background: '#e5393533' } }}>
+                      <DeleteIcon fontSize="small" />
+                    </IconButton>
+                  </div>
+                ))}
               </div>
             </div>
           </div>
+          {/* End Text Boxes Card */}
           <div style={{ padding: '0 24px', marginBottom: 24 }}>
             {/* Remove Templates and Stickers sections from left sidebar */}
           </div>
