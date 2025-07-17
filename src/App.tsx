@@ -225,6 +225,8 @@ function App() {
 
   // Remove text by id
   const removeText = (id: number) => {
+    const text = texts.find(t => t.id === id);
+    if (text?.type === 'top' || text?.type === 'bottom') return; // Prevent removal
     setTexts((prev) => {
       const next = prev.filter((t) => t.id !== id);
       setTimeout(pushHistory, 0); // Add to history for undo/redo
@@ -583,7 +585,7 @@ function App() {
         onDoubleClick={handleDoubleClick}
       >
         {/* Remove button for text */}
-        {isSelected && (
+        {isSelected && text.type !== 'top' && text.type !== 'bottom' && (
           <button
             onClick={e => { e.stopPropagation(); removeText(text.id); }}
             style={{
@@ -1449,7 +1451,7 @@ function App() {
             <div style={{ background: 'rgba(24,26,32,0.85)', borderRadius: 16, boxShadow: '0 4px 24px #00ffe744', border: '1.5px solid #00ffe7', padding: '18px 14px', display: 'flex', flexDirection: 'column', gap: 10 }}>
               <Typography variant="subtitle2" sx={{ color: '#00ffe7', fontWeight: 900, mb: 1, fontFamily: 'Bangers, Impact, Inter, Arial, sans-serif', fontSize: 20, textAlign: 'center', width: '100%', letterSpacing: 1 }}>Text Boxes</Typography>
               <div style={{ flex: 1, minHeight: 80, maxHeight: 260, overflowY: 'auto', display: 'flex', flexDirection: 'column', gap: 8, padding: '0 2px' }}>
-                {texts.map((text) => (
+                {texts.filter(t => t.type !== 'top' && t.type !== 'bottom').map((text: typeof texts[0]) => (
                   <div key={text.id} style={{ display: 'flex', alignItems: 'center', background: selectedTextId === text.id ? 'rgba(0,255,231,0.10)' : 'rgba(35,39,47,0.85)', borderRadius: 8, boxShadow: selectedTextId === text.id ? '0 2px 8px #00ffe744' : 'none', border: selectedTextId === text.id ? '1.5px solid #00ffe7' : '1.5px solid transparent', padding: '4px 8px', transition: 'all 0.15s', cursor: 'pointer', minHeight: 36 }}>
                     <span onClick={() => setSelectedTextId(text.id)} style={{ flex: 1, fontSize: 15, fontWeight: 900, fontFamily: 'Bangers, Impact, Inter, Arial, sans-serif', color: selectedTextId === text.id ? '#00ffe7' : '#fff', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', paddingRight: 8 }}>{text.value || 'Text'}</span>
                     <IconButton size="small" onClick={() => removeText(text.id)} title="Remove" sx={{ color: '#e53935', width: 28, height: 28, borderRadius: 2, p: 0.5, ml: 1, transition: 'background 0.15s', '&:hover': { background: '#e5393533' } }}>
