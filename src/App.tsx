@@ -164,6 +164,24 @@ function App() {
     }
   };
 
+  // Add this function near handleImageUpload
+  const handleSetTemplate = (src: string) => {
+    const img = new window.Image();
+    img.onload = () => {
+      // Fit to max 90vw/70vh
+      const maxW = window.innerWidth * 0.9;
+      const maxH = window.innerHeight * 0.7;
+      let w = img.width;
+      let h = img.height;
+      const scale = Math.min(maxW / w, maxH / h, 1);
+      w = Math.round(w * scale);
+      h = Math.round(h * scale);
+      setCanvasSize({ width: w, height: h });
+      setBgImage(src);
+    };
+    img.src = src;
+  };
+
   const handleAddSticker = (src: string) => {
     setStickers((prev) => {
       const next = [
@@ -1320,6 +1338,29 @@ function App() {
     }
   };
 
+  // Add after canvasSize state
+  useEffect(() => {
+    setTexts(prev => prev.map(t => {
+      if (t.type === 'top') {
+        return {
+          ...t,
+          x: Math.round(canvasSize.width * 0.06),
+          y: Math.round(canvasSize.height * 0.02),
+          width: Math.round(canvasSize.width * 0.88),
+        };
+      }
+      if (t.type === 'bottom') {
+        return {
+          ...t,
+          x: Math.round(canvasSize.width * 0.06),
+          y: Math.round(canvasSize.height - (canvasSize.height * 0.02) - t.height),
+          width: Math.round(canvasSize.width * 0.88),
+        };
+      }
+      return t;
+    }));
+  }, [canvasSize]);
+
   return (
     <Box sx={{ height: '100vh', width: '100vw', background: '#181a20' }}>
       <AppBar position="static" sx={{ background: 'linear-gradient(90deg,#23272f 60%,#181a20 100%)', boxShadow: '0 2px 24px #00ffe744', height: 56, justifyContent: 'center' }}>
@@ -1605,7 +1646,7 @@ function App() {
             <Typography variant="subtitle2" sx={{ color: '#00ffe7', fontWeight: 700, mb: 1, fontFamily: 'Bangers, Impact, Inter, Arial, sans-serif', fontSize: 18 }}>Templates</Typography>
             <div style={{ display: 'flex', gap: 8, overflowX: 'auto', marginBottom: 12 }}>
               {templates.map((tpl) => (
-                <img key={tpl.src} src={tpl.src} alt={tpl.name} title={tpl.name} style={{ width: 48, height: 48, objectFit: 'cover', borderRadius: 8, border: '2px solid #00ffe7', cursor: 'pointer', boxShadow: '0 2px 8px #00ffe744', margin: '0 2px' }} onClick={() => setBgImage(tpl.src)} />
+                <img key={tpl.src} src={tpl.src} alt={tpl.name} title={tpl.name} style={{ width: 48, height: 48, objectFit: 'cover', borderRadius: 8, border: '2px solid #00ffe7', cursor: 'pointer', boxShadow: '0 2px 8px #00ffe744', margin: '0 2px' }} onClick={() => handleSetTemplate(tpl.src)} />
               ))}
               <IconButton color="primary" onClick={() => uploadTemplateInputRef.current?.click()} title="Upload Template" style={{ background: '#23272f', borderRadius: 8, width: 48, height: 48, margin: 0, border: '2px solid #ff00c8', flex: '0 0 auto', display: 'inline-flex', alignItems: 'center', justifyContent: 'center' }}>
                 <AddPhotoAlternateIcon sx={{ color: '#ff00c8' }} />
