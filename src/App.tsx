@@ -128,7 +128,11 @@ function App() {
   }
   function handleDrawPointerUp() {
     if (!drawMode || !currentLine) return;
-    setLines((prev) => [...prev, currentLine]);
+    setLines((prev) => {
+      const next = [...prev, currentLine];
+      setTimeout(pushHistory, 0); // Add to history for undo/redo
+      return next;
+    });
     setCurrentLine(null);
   }
 
