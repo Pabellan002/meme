@@ -225,7 +225,11 @@ function App() {
 
   // Remove text by id
   const removeText = (id: number) => {
-    setTexts((prev) => prev.filter((t) => t.id !== id));
+    setTexts((prev) => {
+      const next = prev.filter((t) => t.id !== id);
+      setTimeout(pushHistory, 0); // Add to history for undo/redo
+      return next;
+    });
     if (selectedTextId === id) setSelectedTextId(null);
   };
   // Remove sticker by id
